@@ -6,6 +6,8 @@ public class Admin  {
 		//
 	Scanner scanner = new Scanner(System.in);
 	
+	
+	// constructor injection 
 	private Connection connection;
 
     public Admin(Connection connection) {

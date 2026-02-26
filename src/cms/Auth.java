@@ -15,8 +15,6 @@ public class Auth {
     
 	public boolean adminLogin(String username,String password) { 
 		
-	
-		
 		// prepare statement to store username and password  from db 
 		try {
 			

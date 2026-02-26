@@ -6,6 +6,7 @@ public class Main {
 	// calling object 
 
 	Scanner scanner = new Scanner(System.in);
+	
 	private Connection connection;
 	public Main(Connection connection) {
 		this.connection = connection;

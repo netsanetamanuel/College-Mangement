@@ -3,7 +3,7 @@ package cms;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-
+// function that returns connection from database 
 
 
 // java class tunnel b/d java and postgress 
@@ -11,7 +11,7 @@ public class DBfunction {
 	
 	// connection represent connection b/n database 
 	public Connection connect_to_db(String dbname,String user,String pass) {
-		
+		// create initialized object 
 		Connection connection = null;
 		try {
 			Class.forName("org.postgresql.Driver");
