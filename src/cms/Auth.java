@@ -23,12 +23,12 @@ public class Auth {
 				return false;
 			}
 			
-			// preparedstatement class to sotre username in statment object 
+	
 			PreparedStatement statement = connection.prepareStatement("SELECT password FROM admin WHERE username = ?");
-			// statement object to store username from database 
+			 
 			statement.setString(1,username);
 			
-			//fetch the result statement from after excutign query 
+		
 			ResultSet resultset = statement.executeQuery();
 			
 			if(!resultset.next()) {

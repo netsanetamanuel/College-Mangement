@@ -9,11 +9,14 @@ import java.sql.DriverManager;
 // java class tunnel b/d java and postgress 
 public class DBfunction {
 	
-	// connection represent connection b/n database 
+	// method that returns db connection recieve parameter 
 	public Connection connect_to_db(String dbname,String user,String pass) {
 		// create initialized object 
+		
 		Connection connection = null;
+		
 		try {
+			
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+dbname,user,pass);
 			if(connection!=null) {
@@ -23,6 +26,7 @@ public class DBfunction {
 			}
 			
 		}catch(Exception e) {
+			
 			System.out.println(e);
 		}
 		
