@@ -79,10 +79,10 @@ public class Admin  extends Userfunction{
 	
 	public  void showMenu() {
 		System.out.println("----------Admin Dashboard-------------------"
-						 + " 1. Manage Staf"
-						 + " 2. Manage Student"
-						 + " 3. Manage Course"
-						 + " 4  Get Report");
+						 + " 1. Manage Staf \n"
+						 + " 2. Manage Student \n"
+						 + " 3. Manage Course \n"
+						 + " 4  Get Report \n");
 		System.out.println("Enter option: ");
 		int choice = scanner.nextInt();
 		scanner.nextLine();

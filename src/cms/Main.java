@@ -22,6 +22,7 @@ public class Main {
 		
 		
 		int choice = scanner.nextInt();
+		
 		Admin newAdmin = new Admin(connection);
 		
 		

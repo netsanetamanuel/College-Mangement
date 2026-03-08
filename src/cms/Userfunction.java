@@ -11,8 +11,8 @@ public class Userfunction {
 	private String userSection;
 	private String Usertype;
 	
-	private String[] userCourses = new String[6];
-	private String[] userSections = new String[6];
+	private String[] userCourses = new String[3];
+	private String[] userSections = new String[3];
 	
 	
 	public Userfunction(String userName,String userEmail,String Usertype) {
@@ -86,34 +86,38 @@ public class Userfunction {
 	    if(Usertype.equals("student")) {
 	    	 newuser.userSection = scanner.nextLine();
 	    }else if (Usertype.equals("staff")) {
-	    	for(int i=0;i<=6;i++) {
+	    	for(int i=0;i<3;i++) {
 	    		newuser.userSections[i]=scanner.nextLine();
 	    	}
 	    }
 	    System.out.println(Usertype+"Courses");
-	    for(int i=0;i<=6;i++) {
+	    for(int i=0;i<3;i++) {
 	    	newuser.userCourses[i]=scanner.nextLine();	  
 	    }
 	    
 ;	    
 	    	
-	    	var sql = "INSERT INTO "+Usertype+" (userName,userEmail,userCourses,userSection) values(?,?,?,?)";
+	    	var sql = "INSERT INTO "+Usertype+" (staffname,staffemail,staffcourses,staffsection) values(?,?,?,?)";
 	    	
 	    	try {
 	    		
 	    		PreparedStatement statmnt = connection.prepareStatement(sql);
-	    		statmnt.setString(1, newuser.userName);
-	    		statmnt.setString(2, newuser.userEmail);
+	    	
 	    		//set array method for string 
 	    		//statmnt.setArray(3, userCourses);
+	    		
 	    		if(newuser.getUserType().equals("staff")) {
-	    		Array courseArray = connection.createArrayOf("staffcourses", newuser.userCourses);
-	    		Array sectionArray = connection.createArrayOf("staffsecton", newuser.userSections);
-	    		statmnt.setArray(3, courseArray);
-	    		statmnt.setArray(4, sectionArray);
+	    			statmnt.setString(1, newuser.userName);
+		    		statmnt.setString(2, newuser.userEmail);
+		    		Array courseArray = connection.createArrayOf("varchar", newuser.userCourses);
+		    		Array sectionArray = connection.createArrayOf("varchar", newuser.userSections);
+		    		statmnt.setArray(3, courseArray);
+		    		statmnt.setArray(4, sectionArray);
 	    		
 	    		} else if(newuser.getUserType().equals("student")) {
-	    			Array studCourse = connection.createArrayOf("studentcourse", newuser.userCourses);
+	    			statmnt.setString(1, newuser.userName);
+		    		statmnt.setString(2, newuser.userEmail);
+	    			Array studCourse = connection.createArrayOf("varchar", newuser.userCourses);
 	    			statmnt.setArray(3, studCourse);
 	    			statmnt.setString(4, newuser.userSection);
 	    		}
