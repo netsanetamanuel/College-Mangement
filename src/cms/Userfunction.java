@@ -1,11 +1,13 @@
 package cms;
 
-import java.sql.*;
+import java.sql.*;  // java class for sql builtin function
 
-import java.util.*;
+import java.util.*;  // for scanner object 
 
 public class Userfunction {
 	
+	
+	// user function instance variables 
 	private String  userName;
 	private String userEmail;
 	private String userSection;
@@ -15,6 +17,8 @@ public class Userfunction {
 	private String[] userSections = new String[3];
 	
 	
+	
+	// overloaded constructore for each user 
 	public Userfunction(String userName,String userEmail,String Usertype) {
 		this.userName=userName;
 		this.userEmail=userEmail;
@@ -22,12 +26,14 @@ public class Userfunction {
 		
 	}
 	
+	
 	public Userfunction(String userName,String userEmail,String Usertype,String[] userCourses) {
 		this.userName=userName;
 		this.userEmail=userEmail;
 		this.Usertype=Usertype;
 		this.userCourses=userCourses;
 	}
+	
 	public Userfunction(String userName,String userEmail,String Usertype,String[] userCourses,String userSection) {
 		this.userName=userName;
 		this.userEmail=userEmail;
@@ -45,7 +51,7 @@ public class Userfunction {
 		this.userSections=userSections;
 	}
 	
-	
+	// setter and getter function for usertype ( student or staff_)
 	public void setusertype(String Usertype) {
 		this.Usertype=Usertype;
 	}
@@ -83,20 +89,25 @@ public class Userfunction {
 	     newuser.userEmail = scanner.nextLine();
 	    
 	    System.out.println(Usertype+"Section: ");
+	    
 	    if(Usertype.equals("student")) {
 	    	 newuser.userSection = scanner.nextLine();
+	    	 
 	    }else if (Usertype.equals("staff")) {
 	    	for(int i=0;i<3;i++) {
+	    		
 	    		newuser.userSections[i]=scanner.nextLine();
 	    	}
 	    }
+	    
 	    System.out.println(Usertype+"Courses");
 	    for(int i=0;i<3;i++) {
+	    	
 	    	newuser.userCourses[i]=scanner.nextLine();	  
 	    }
 	    
 ;	    
-	    	
+	    	// create precompiled sql to insert data 
 	    	var sql = "INSERT INTO "+Usertype+" (staffname,staffemail,staffcourses,staffsection) values(?,?,?,?)";
 	    	
 	    	try {
@@ -109,10 +120,14 @@ public class Userfunction {
 	    		if(newuser.getUserType().equals("staff")) {
 	    			statmnt.setString(1, newuser.userName);
 		    		statmnt.setString(2, newuser.userEmail);
+		    		
+		    		// create array of courseArray
 		    		Array courseArray = connection.createArrayOf("varchar", newuser.userCourses);
 		    		Array sectionArray = connection.createArrayOf("varchar", newuser.userSections);
 		    		statmnt.setArray(3, courseArray);
 		    		statmnt.setArray(4, sectionArray);
+		    		
+		    		
 	    		
 	    		} else if(newuser.getUserType().equals("student")) {
 	    			statmnt.setString(1, newuser.userName);
@@ -120,13 +135,12 @@ public class Userfunction {
 	    			Array studCourse = connection.createArrayOf("varchar", newuser.userCourses);
 	    			statmnt.setArray(3, studCourse);
 	    			statmnt.setString(4, newuser.userSection);
+	    			
+	    			
 	    		}
 	    	
 	    		statmnt.executeUpdate();
 
-	    		
-	    		
-	    		
 	    	}catch (SQLException e){
 	    		throw new RuntimeException(e);
 	    	}

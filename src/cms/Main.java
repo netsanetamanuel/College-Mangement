@@ -24,6 +24,7 @@ public class Main {
 		int choice = scanner.nextInt();
 		
 		Admin newAdmin = new Admin(connection);
+		staff newStaff = new staff(connection);
 		
 		
 		switch(choice) {
@@ -32,7 +33,7 @@ public class Main {
 			newAdmin.adminLogin();
 			break;
 		case 2: 
-			System.out.println("uc");
+			newStaff.staff_Dash();
 			break;
 		case 3:
 			System.out.println("uc");
@@ -47,7 +48,7 @@ public class Main {
 	// create main dashboard
 	public static void main(String[] args) {
 		
-		// create ui object 
+	// connect to driver 
 	DBfunction dbconn = new DBfunction();
 	Connection conn = dbconn.connect_to_db("college","postgres", "dsa321");
 	

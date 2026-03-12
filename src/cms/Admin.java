@@ -13,9 +13,10 @@ public class Admin  extends Userfunction{
 	}
 	
 	
-	// constructor injection 
+	// constructor injection uses connection object 
 	private Connection connection;
 
+	
     public Admin(Connection connection) {
     	super(connection);
         this.connection = connection;
