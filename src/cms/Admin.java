@@ -6,17 +6,17 @@ public class Admin  extends Userfunction{
 		//
 	Scanner scanner = new Scanner(System.in);
 	
-	public Admin(String userName,String userEmail,String usertype,String password ) {
+	public Admin(String userName,String userEmail,String usertype,String password,String username) {
 	
-		super( userName, userEmail,usertype);
-		
+		super(userName, userEmail,usertype,password,username);
+
 	}
 	
 	
 	// constructor injection uses connection object 
+	
 	private Connection connection;
 
-	
     public Admin(Connection connection) {
     	super(connection);
         this.connection = connection;
@@ -63,9 +63,11 @@ public class Admin  extends Userfunction{
 		String password = scanner.nextLine();
 		
 		Auth newAuth = new Auth(connection);
+
+		super.setusertype("admin");
+		String user_type = getUserType();
 		
-		
-		if(newAuth.adminLogin(username, password)) {
+		if(newAuth.adminLogin(username,password,user_type)) {
 			showMenu();
 		}else {
 			System.out.println("go");
@@ -79,7 +81,7 @@ public class Admin  extends Userfunction{
 	
 	
 	public  void showMenu() {
-		System.out.println("----------Admin Dashboard-------------------"
+		System.out.println("----------Admin Dashboard-------------------\n"
 						 + " 1. Manage Staf \n"
 						 + " 2. Manage Student \n"
 						 + " 3. Manage Course \n"
@@ -117,6 +119,7 @@ public class Admin  extends Userfunction{
 			
 			switch(choice) {
 			case 1:
+				
 				newstaff.setusertype("staff");
 				addUser(newstaff);
 				break;

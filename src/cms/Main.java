@@ -21,7 +21,7 @@ public class Main {
 				         + "----- 	  Choose (1-3): -------------\n");	
 		
 		
-		int choice = scanner.nextInt();
+		int choice = scanner.nextInt(); 
 		
 		Admin newAdmin = new Admin(connection);
 		staff newStaff = new staff(connection);
@@ -33,7 +33,7 @@ public class Main {
 			newAdmin.adminLogin();
 			break;
 		case 2: 
-			newStaff.staff_Dash();
+			newStaff.staff_login();
 			break;
 		case 3:
 			System.out.println("uc");

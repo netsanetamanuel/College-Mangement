@@ -5,18 +5,26 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 
-public class Auth {
+public class Auth extends Userfunction{
 	
 	// create connection object 
-	
+
 	private Connection connection;
+	
+
 
     public Auth(Connection connection) {
-        this.connection = connection;
+    	super(connection);
+    	
+        this.connection=connection;
     }
     
     // methods for login 
-	public boolean adminLogin(String username,String password) { 
+    
+    
+    
+    
+	public boolean adminLogin(String username,String password,String user_type) { 
 		
 		// prepare statement to store username and password  from db 
 		try {
@@ -27,9 +35,9 @@ public class Auth {
 				return false;
 			}
 			
-	
+			
 			// prepare a sql statment 
-			PreparedStatement statement = connection.prepareStatement("SELECT password FROM admin WHERE username = ?");
+			PreparedStatement statement = connection.prepareStatement("SELECT password FROM "+user_type+" WHERE username = ?");
 			 
 			statement.setString(1,username);
 			
@@ -43,9 +51,9 @@ public class Auth {
 				return false;
 			}
 			
-			//String hashpassword = resultset.getString("password");
+			String hashpassword = resultset.getString("password");
 			// store the password in hashpwd
-			String hashpassword = BCrypt.hashpw(password, BCrypt.gensalt());
+			hashpassword = BCrypt.hashpw(password, BCrypt.gensalt());
 			
 			return BCrypt.checkpw(password, hashpassword);
 			
@@ -62,31 +70,56 @@ public class Auth {
 	}
 
 	
-	public boolean userLogin(String username, String password) {
+	// new login function for all 
+	// pass object 
+    
+  
+    //String className = getClass().getSimpleName();
+ 
+    /*
+	public boolean login(String Username,String Password) {
+	
+		super.setusertype(className);
+		String user_type = getUserType();
+	    
 		
-		if(username.isEmpty()||password.isEmpty()) {
+		if(Username.isEmpty()||Password.isEmpty()) {
 			System.out.println("username or password don't exist");
 			return false;
 		}
+	
 		
 		try {
+			// create sql statment 
+			var sql ="SELECT "+user_type+" password FROM "+user_type+" WHERE "+user_type+" username = ?";
+			
+			PreparedStatement stament = connection.prepareStatement(sql);
+			
+			stament.setString(1, Username);
+			ResultSet result = stament.executeQuery();
 			
 			
+			// check for next row 
 			
-			// prepared statment pre compiled sql statment 
-			PreparedStatement statmnt = connection.prepareStatement("SELECT password FROM staff WHERE username = ?");
-			ResultSet result = statmnt.executeQuery();
+			if(!result.next()) {
+				return false;
+			}
 			
-			// create hasspwd using bcrypt 
-			String hashpw = BCrypt.hashpw(password, BCrypt.gensalt());
+			String hashedpw = result.getString("staff_password");
 			
-			return BCrypt.checkpw(password, hashpw);
+			 hashedpw = BCrypt.hashpw(hashedpw, BCrypt.gensalt());
 			
-			
+			return BCrypt.checkpw(Password, hashedpw);
 			
 		}catch(SQLException e) {
 			throw new RuntimeException(e);
 		}
+
+		
+		
+	}*/
+		
 		
 	}
-}
+	
+

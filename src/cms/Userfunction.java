@@ -4,6 +4,8 @@ import java.sql.*;  // java class for sql builtin function
 
 import java.util.*;  // for scanner object 
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class Userfunction {
 	
 	
@@ -12,28 +14,54 @@ public class Userfunction {
 	private String userEmail;
 	private String userSection;
 	private String Usertype;
-	
+	private String defpwd;
+	private String defUsername;
 	private String[] userCourses = new String[3];
 	private String[] userSections = new String[3];
 	
-	
-	
-	// overloaded constructore for each user 
-	public Userfunction(String userName,String userEmail,String Usertype) {
-		this.userName=userName;
-		this.userEmail=userEmail;
+
+
+	// setter and getter function for usertype ( student or staff_)
+	public void setusertype(String Usertype) {
 		this.Usertype=Usertype;
-		
+	}
+	
+	public String getUserType(){
+		return this.Usertype;
+	}
+	
+
+	public void setDefpwd(String defpwd) {
+		this.defpwd = userName+"4321";
+	}
+	public String getdefpwd() {
+		return defpwd;
 	}
 	
 	
-	public Userfunction(String userName,String userEmail,String Usertype,String[] userCourses) {
+	public void setUsername(String defUsername) {
+		 this.defUsername = userName.toLowerCase()+"1234";
+	}
+	public String getUsername() {
+		return defUsername;
+	}
+	
+	
+	
+
+	// constructor for user with default username and pwd
+	public Userfunction(String userName,String userEmail,String Usertype,String defpwd,String defUsername) {
 		this.userName=userName;
 		this.userEmail=userEmail;
 		this.Usertype=Usertype;
-		this.userCourses=userCourses;
+     	this.defpwd=defpwd;
+     	this.defUsername=defUsername;
+//		
 	}
 	
+	
+
+	// constructor for students instance
 	public Userfunction(String userName,String userEmail,String Usertype,String[] userCourses,String userSection) {
 		this.userName=userName;
 		this.userEmail=userEmail;
@@ -42,7 +70,7 @@ public class Userfunction {
 		this.userSection=userSection;
 	}
 	
-	// constructor for staff
+	// constructor for staff instance 
 	public Userfunction(String userName,String userEmail,String Usertype,String[] userCourses,String[] userSections) {
 		this.userName=userName;
 		this.userEmail=userEmail;
@@ -51,22 +79,9 @@ public class Userfunction {
 		this.userSections=userSections;
 	}
 	
-	// setter and getter function for usertype ( student or staff_)
-	public void setusertype(String Usertype) {
-		this.Usertype=Usertype;
-	}
-	
-	public String getUserType(){
-		return Usertype;
-	}
-	
-	
-	
-	
 	
 
-	
-	  Scanner scanner = new Scanner(System.in);
+	   Scanner scanner = new Scanner(System.in);
 	
 		// create database connection 
 		private Connection connection;
@@ -79,6 +94,32 @@ public class Userfunction {
 		
 	  //  public Userfunction newuser = new Userfunction( userName, userEmail,Usertype,userCourses, userSections);
 	    
+	    public boolean login(String User_Name,String User_Pass,String Usertype) {
+	  
+			
+	    	try {
+	    		
+	    		var sql = "SELECT "+User_Pass+" FROM "+Usertype+" WHERE "+User_Name+" =?";
+		    	
+		    	PreparedStatement statement = connection.prepareStatement(sql);
+		    	statement.setString(1,User_Pass);
+		    	//ResultSet result = statement.executeQuery();
+		    	
+		    	// store the result 
+		    	
+		    	// user Bcrypt for secure password 
+		    	String hashed_pw = BCrypt.hashpw(User_Pass, BCrypt.gensalt());
+		    	
+		    	return BCrypt.checkpw(User_Pass, hashed_pw);
+		    	
+		    	
+	    	}catch(SQLException e) {
+	    		throw new RuntimeException(e);
+	    	}
+	    
+	    }
+	    
+	    // add register user 
 	    public void addUser(Userfunction newuser) {
 	    	
 	    	// excute query to insert data
@@ -108,18 +149,21 @@ public class Userfunction {
 	    
 ;	    
 	    	// create precompiled sql to insert data 
-	    	var sql = "INSERT INTO "+Usertype+" (staffname,staffemail,staffcourses,staffsection) values(?,?,?,?)";
-	    	
+	    	var sql = "INSERT INTO "+Usertype+" (staff_name,staff_email,staff_sections,staff_courses,staff_username,staff_password) values(?,?,?,?,?,?)";
+	    
 	    	try {
 	    		
 	    		PreparedStatement statmnt = connection.prepareStatement(sql);
+		    	
+		    	statmnt.setString(1, newuser.userName);
+	    		statmnt.setString(2, newuser.userEmail);
 	    	
 	    		//set array method for string 
 	    		//statmnt.setArray(3, userCourses);
-	    		
+	    	
+	    		statmnt.setString(2, newuser.userEmail);
 	    		if(newuser.getUserType().equals("staff")) {
-	    			statmnt.setString(1, newuser.userName);
-		    		statmnt.setString(2, newuser.userEmail);
+	    			
 		    		
 		    		// create array of courseArray
 		    		Array courseArray = connection.createArrayOf("varchar", newuser.userCourses);
@@ -138,8 +182,17 @@ public class Userfunction {
 	    			
 	    			
 	    		}
+	    		
+	    		// set default password and username for new user 
+	    		newuser.setDefpwd(userName);
+	    		newuser.setUsername(userName);
+	    		
+	    		statmnt.setString(5, newuser.getUsername());
+	    		statmnt.setString(6,newuser.getdefpwd());
 	    	
 	    		statmnt.executeUpdate();
+	    		System.out.println("Registered succesfully");
+	    	
 
 	    	}catch (SQLException e){
 	    		throw new RuntimeException(e);
@@ -149,6 +202,5 @@ public class Userfunction {
 	
 		
 		
-	
 	
 }

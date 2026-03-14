@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.*;
 import java.util.*;
 
+//import jdk.internal.classfile.Superclass;
+
 public class staff extends Userfunction{
 	
 	
@@ -22,27 +24,35 @@ public class staff extends Userfunction{
 		private Connection connection;
 		
 		// injecting constructore with all the methods 
+		
 		public staff(Connection connection) {
 			super(connection);
 			this.connection = connection;
 	
 		}
 		
+	
+	
 		
-		public staff(String userName,String userEmail,String Usertype,String[] userCourses,String[] userSections) {
+		
+		public staff(String userName,String userEmail,String Usertype,String[] userCourses,String[] userSections,
+				String staffName,String staffEmail,String staffUsername,String staffpwd,String[] staffCourses,String[] staffSections) {
 			super(userName,userEmail,Usertype,userCourses,userSections);
+			
 			this.staffName = staffName;
 			this.staffEmail=staffEmail;
 			this.staffUsername=staffUsername;
 			this.staffpwd=staffpwd;
 			this.staffCourses=staffCourses;
 			this.staffSections=staffSections;
+			
+			
 		}
 		
 		
-	
 		
-		 public void staff_Dash() {
+		
+		 public void staff_login() {
 				System.out.println("--------------Staff Login--------------\n"
 								 + "1. Login \n"
 								 + "2. Register \n"
@@ -57,7 +67,7 @@ public class staff extends Userfunction{
 				
 				switch(choice) {
 				case 1:
-					//login_Dash();
+					login();
 					break;
 				case 2: 
 					register_staff();
@@ -71,56 +81,97 @@ public class staff extends Userfunction{
 		// 
 		 }
 		 
-			public void show_Menu() {
-				System.out.println("----------Staff Dashboard--------------\n"
-						 +"1. Profile \n"
-						 +"1. Class \n"
-						 +"2. Exams \n"
-						 + "3. Grades \n");
-				System.out.println("Choose 1-3: ");
+		 
+
+		 
+	
+		public void login() {
+		  	System.out.println("Enter username: ");
+			   staffName= scanner.nextLine();	
 				
+				System.out.println("Enter password: ");
+				staffpwd= scanner.nextLine();
+				
+			// call setter method of supper class 
+			super.setusertype("staff");
+			// store user type
+			String usertype = super.getUserType();			  	// retrive data from db 
+			
+			// call the login method and pass the parameters 
+			if(login(staffName,staffpwd,usertype)) {
+				staff_dash();
+			}else {
+				System.out.println("go");
 			}
 			
 			
-//		 public void login_dash() {
-//			 System.out.println("Enter username");
-//			 String username = scanner.nextLine();
-//			 System.out.println("Enter password");
-//			 String pwd = scanner.nextLine();
-//			 
-//			 // get user user credential
-//			
-//		 }
+			
+			
+			
+			
+			
+			
+		}
 		
+		public void staff_dash() {
+			System.out.println("--------- Staff Dashboard -------------- \n"
+					+ "1. My Profile \n"
+					+ "2. My Classes \n"
+					+ "3. Students \n"
+					+ "4. Attendance \n"
+					+ "5. Exams \n"
+					+ "6. Grades \n");
+			System.out.println("Choose [1-6]: ");
+			int choice = scanner.nextInt();
+			scanner.nextLine();
+			
+			switch(choice) {
+			case 1:
+				 System.out.println("uc");
+				 break;
+			case 2:
+				System.out.println("uc");
+				break;
+			default:
+				System.out.println("invalid ");
+				break;
+			}
+			
+			
+		}
+	
+		
+		
+		// Staff Registration 
 		public void register_staff() {
 			// take the data from the db validate user and display courses 
 			// if registered by admin set custom pass and username 
 			
 	        System.out.println("Enter your your name: ");
-	        staffName = scanner.nextLine();
+	        this.staffName = scanner.nextLine();
 	        System.out.println("Enter your email: ");
-	        staffEmail = scanner.nextLine();
+	        this.staffEmail = scanner.nextLine();
 
 	    
 	        System.out.println("Enter your Courses: ");
 	        for(int i=0;i<3;i++) {
 	        	
-	        	staffCourses[i] =scanner.nextLine();
+	        	this.staffCourses[i] =scanner.nextLine();
 	        }
 	        
 	        System.out.println("Enter your Sections: ");
 	        for(int i=0;i<3;i++) {
-	        	staffSections[i]=scanner.nextLine();
+	        	this.staffSections[i]=scanner.nextLine();
 	        }
 	        
 	        System.out.println("Enter username: ");
-	        staffUsername = scanner.nextLine();
+	        this.staffUsername = scanner.nextLine();
 	        System.out.println("Enter password: ");
-	        staffpwd = scanner.nextLine();
+	        this.staffpwd = scanner.nextLine();
 	        
 	        // register to database 
 	        
-	        var sql = "INSERT INTO staff (staffname ,staffemail,staffcourses,staffsection, username ,password) values(?,?,?,?,?,?)";
+	        var sql = "INSERT INTO staff (staff_name ,staff_email,staff_courses,staff_sections, staff_username ,staff_password) values(?,?,?,?,?,?)";
 	        
 	        try {
 	        	// convert java array to sql array 
@@ -130,12 +181,13 @@ public class staff extends Userfunction{
 	        	
 	        	// make prepared statement 
 	        	PreparedStatement statment = connection.prepareStatement(sql);
-	        	statment.setString(1, staffName);
-	        	statment.setString(2, staffEmail);
+	        	
+	        	statment.setString(1, this.staffName);
+	        	statment.setString(2, this.staffEmail);
 	        	statment.setArray(3, arrayCourses);
 	        	statment.setArray(4, arraySections);
-	        	statment.setString(5, staffUsername);
-	        	statment.setString(6, staffpwd);
+	        	statment.setString(5, this.staffUsername);
+	        	statment.setString(6, this.staffpwd);
 	        	
 	        	
 	            statment.executeUpdate();

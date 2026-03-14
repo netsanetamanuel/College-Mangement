@@ -10,12 +10,14 @@ import java.sql.DriverManager;
 public class DBfunction {
 	
 	// method that returns db connection recieve parameter 
-	public Connection connect_to_db(String dbname,String user,String pass) {
+	    public Connection connect_to_db(String dbname,String user,String pass) {
 		// create initialized object 
 		
 		Connection connection = null;
 		
 		try {
+			
+			//Connect Java to postgres;
 			
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+dbname,user,pass);
